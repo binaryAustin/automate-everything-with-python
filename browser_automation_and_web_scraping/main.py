@@ -10,7 +10,7 @@ def get_driver():
     options.add_argument("no-sandbox")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_argument("disable-blink-features=AutomationControlled")
-    driver = webdriver.Chrome(executable_path="", options=options)
+    driver = webdriver.Chrome(options=options)
     driver.get("https://automated.pythonanywhere.com/")
     return driver
 
@@ -18,7 +18,7 @@ def get_driver():
 def main():
     driver = get_driver()
     element = driver.find_element(by="xpath", value="/html/body/div[1]/div/h1[1]")
-    print(element)
+    print(element.text)
 
 
 if __name__ == "__main__":
