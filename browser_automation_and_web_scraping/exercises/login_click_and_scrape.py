@@ -9,6 +9,15 @@ def main():
     options.add_argument("disable-dev-shm-usage")
     options.add_argument("no-sandbox")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option(
+        "prefs",
+        {
+            "credentials_enable_service": False,  # Disable "Save Password"
+            "profile.password_manager_leak_detection": False,  # Disable password leak detection pop-up
+            "profile.default_content_setting_values.notifications": 2,  # Block notifications
+            "profile.default_content_setting_values.geolocation": 2,  # Block geolocation requests
+        },
+    )
     options.add_argument("disable-blink-features=AutomationControlled")
     driver = webdriver.Chrome(options=options)
     driver.get("https://automated.pythonanywhere.com/login/")
@@ -20,8 +29,16 @@ def main():
     password_input.send_keys("automatedautomated")
     sign_in_button.click()
 
+    driver.implicitly_wait(10.0)
+
     home_link = driver.find_element(by=By.XPATH, value="/html/body/nav/div/a")
     home_link.click()
+
+    div = driver.find_element(
+        by=By.XPATH, value="//h1[@id='displaytimer']/div[@class='text-success']"
+    )
+    temperature = float(div.text.split(":")[1].strip())
+    print(temperature)
 
     driver.quit()
 
