@@ -1,8 +1,8 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 
-def get_driver():
-    # Set options to make browsing easier
+def main():
     options = webdriver.ChromeOptions()
     options.add_argument("disable-infobars")
     options.add_argument("start-maximized")
@@ -12,13 +12,13 @@ def get_driver():
     options.add_argument("disable-blink-features=AutomationControlled")
     driver = webdriver.Chrome(options=options)
     driver.get("https://automated.pythonanywhere.com/")
-    return driver
-
-
-def main():
-    driver = get_driver()
-    element = driver.find_element(by="xpath", value="/html/body/div[1]/div/h1[1]")
-    print(element.text)
+    driver.implicitly_wait(5.0)
+    element = driver.find_element(
+        by=By.XPATH, value="/html/body/div[1]/div/h1[2]/div[@class='text-success']"
+    )
+    temperature = float(element.text.split(":")[1].strip())
+    print(temperature)
+    driver.quit()
 
 
 if __name__ == "__main__":
